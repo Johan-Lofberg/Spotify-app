@@ -1,15 +1,28 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import './index.css'
+import './index.css';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
 
-import { ThemeProvider } from '@emotion/react'
-import { themeOptions } from './theme/matrial.theme'
+import { BrowserRouter } from 'react-router-dom';
+import SpotifyWebApi from 'spotify-web-api-node';
+import { redirectURL } from './config/config';
+import { ThemeProvider } from '@emotion/react';
+import { themeOptions } from './theme/matrial.theme';
+
+const spotifyApi = new SpotifyWebApi({
+	clientId: import.meta.env.VITE_CLIENT_ID,
+	clientSecret: import.meta.env.VITE_CLIENT_SECRET,
+	redirectUri: redirectURL
+});
+
+console.log(spotifyApi);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-   <ThemeProvider theme={themeOptions}>
-    <App />
-   </ThemeProvider>
-  </React.StrictMode>,
-)
+	<React.StrictMode>
+		<BrowserRouter>
+			<ThemeProvider theme={themeOptions}>
+				<App spotifyApi={spotifyApi} />
+			</ThemeProvider>
+		</BrowserRouter>
+	</React.StrictMode>
+);
