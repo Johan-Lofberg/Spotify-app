@@ -6,7 +6,6 @@ import Login from './pages/Login.jsx';
 function App({ spotifyApi }) {
 	return (
 		<Box className="App">
-
 			<Home />
 		</Box>
 	);
