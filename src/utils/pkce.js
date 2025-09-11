@@ -1,5 +1,5 @@
 const clientId = import.meta.env.VITE_CLIENT_ID;
-const devURL = import.meta.env.VITE_LIVE_URL;
+const devURL = import.meta.env.VITE_REDIRECT_URI;
 
 // utils/pkce.ts
 export function generateCodeVerifier(length = 128) {
