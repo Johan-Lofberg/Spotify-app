@@ -1,0 +1,7 @@
+.NavLink {
+    color:#b3b3b3 ;
+}
+
+.Navlink.active {
+    color: #1db954;
+}

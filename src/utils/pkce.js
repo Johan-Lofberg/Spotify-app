@@ -1,51 +1,51 @@
-const clientId = import.meta.env.VITE_CLIENT_ID;
-const devURL = import.meta.env.VITE_REDIRECT_URI;
+import { clientId, redirectURL } from '../config/config.js';
 
-// utils/pkce.ts
+// Skapar en slumpmässig verifierare
 export function generateCodeVerifier(length = 128) {
-	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
-	let verifier = '';
-	for (let i = 0; i < length; i++) {
-		verifier += possible.charAt(Math.floor(Math.random() * possible.length));
-	}
-	return verifier;
+  let text = '';
+  const possible =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+  for (let i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
 }
 
+// Skapar en challenge baserat på verifieraren (SHA256 + base64url)
 export async function generateCodeChallenge(codeVerifier) {
-	const data = new TextEncoder().encode(codeVerifier);
-	const digest = await crypto.subtle.digest('SHA-256', data);
-	const string = btoa(String.fromCharCode(...new Uint8Array(digest)))
-		.replace(/\+/g, '-')
-		.replace(/\//g, '_')
-		.replace(/=+$/, '');
-	return string;
+  const encoder = new TextEncoder();
+  const data = encoder.encode(codeVerifier);
+  const digest = await window.crypto.subtle.digest('SHA-256', data);
+  return btoa(String.fromCharCode(...new Uint8Array(digest)))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
 }
 
-export const getToken = async (code) => {
-	// stored in the previous step
-	const codeVerifier = localStorage.getItem('code_verifier');
-	const url = 'https://accounts.spotify.com/api/token';
-	const payload = {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded'
-		},
-		body: new URLSearchParams({
-			client_id: clientId,
-			grant_type: 'authorization_code',
-			code,
-			redirect_uri: devURL,
-			code_verifier: codeVerifier
-		})
-	};
+// Hämtar access token från Spotify med authorization code
+export async function getToken(code) {
+  const codeVerifier = localStorage.getItem('code_verifier');
 
-	const body = await fetch(url, payload);
-	const response = await body.json();
+  const body = new URLSearchParams({
+    client_id: clientId,
+    grant_type: 'authorization_code',
+    code,
+    redirect_uri: redirectURL,   // ✅ använd rätt redirectURL
+    code_verifier: codeVerifier,
+  });
 
-	console.log('Access Token:', response.access_token);
+  const response = await fetch('https://accounts.spotify.com/api/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body,
+  });
 
-	if (response.access_token) {
-		sessionStorage.setItem('spotifyToken', response.access_token);
-	}
-	return response.access_token;
-};
+  if (!response.ok) {
+    console.error('Token request failed', await response.text());
+    throw new Error('Failed to fetch access token');
+  }
+
+  return await response.json();
+}
