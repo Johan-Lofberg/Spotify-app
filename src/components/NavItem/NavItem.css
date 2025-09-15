@@ -1,7 +1,7 @@
-.NavLink {
+.nav-item {
     color:#b3b3b3 ;
 }
 
-.Navlink.active {
+.nav-item.active {
     color: #1db954;
 }

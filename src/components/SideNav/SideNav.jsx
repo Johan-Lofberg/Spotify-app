@@ -6,7 +6,7 @@ import NavItem from '../NavItem/NavItem';
 import NavPlaylist from '../NavPlaylist/NavPlaylist';
 
 const SideNav = ({ spotifyApi, token }) => {
-	const [albumList, setAlbumList] = useState(null);
+	const [playlists, setPlaylists] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -16,7 +16,7 @@ const SideNav = ({ spotifyApi, token }) => {
 			const data = await spotifyApi.getUserPlaylists();
 
 			setLoading(false);
-			setAlbumList(data.body.items);
+			setPlaylists(data.body.items);
 		}
 		getPlaylists();
 	}, [spotifyApi, token]);
@@ -27,15 +27,16 @@ const SideNav = ({ spotifyApi, token }) => {
 				return <NavPlaylist key={id} loading={loading} />;
 			});
 		}
-		return albumList.map((playlist, id) => {
-			return <NavPlaylist key={id} id={playlist.id} loading={loading} name={playlist.name} />;
-		});
+	console.log({ playlists });
+	return playlists.map((playlist, id) => (
+	  <NavPlaylist key={playlist.id} id={playlist.id} loading={loading} name={playlist.name} />
+	));
 	};
 
 	return (
 		<Box
 			sx={{
-				bgcolor: 'background.default',
+				bgcolor: 'default',
 				width: 230,
 				height: '100%',
 				display: { xs: 'none', md: 'flex' },

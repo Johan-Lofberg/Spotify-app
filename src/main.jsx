@@ -5,14 +5,14 @@ import App from './App';
 
 import { BrowserRouter } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-node';
-import { redirectURL } from './config/config';
+import { redirectUri } from './config/config';
 import { ThemeProvider } from '@emotion/react';
 import { themeOptions } from './theme/matrial.theme';
 
 const spotifyApi = new SpotifyWebApi({
 	clientId: import.meta.env.VITE_CLIENT_ID,
 	clientSecret: import.meta.env.VITE_CLIENT_SECRET,
-	redirectUri: redirectURL
+	redirectUri: redirectUri
 });
 
 console.log(spotifyApi);

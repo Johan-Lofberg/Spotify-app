@@ -11,10 +11,12 @@ const NavPlaylist = ({ name, id, loading }) => {
 				sx={{
 					color: 'text.secondary',
 					cursor: 'pointer',
-					'&:hover': { color: 'text.primary' }
+					'&:hover': { color: 'white' },
+					fontSize: 10,
+
 				}}
 			>
-				{loading ? <Skeleton variant={'text'} height={'14px'} width={'70px'} /> : name}
+				{loading ? <Skeleton variant={'text'} sx={{ fontSize:10 }} /> : name}
 			</Box>
 		</NavLink>
 	);

@@ -4,7 +4,7 @@ import './NavItem.css'
 
 const NavItem = ({name, Icon, target}) => {
     return ( 
-        <NavLink className={NavLink} to={target} style={{ textDecoration: 'none' }} >
+        <NavLink className="nav-item" to={target} style={{ textDecoration: 'none' }} >
             <Box px={3} py={1} sx={{
                 display: 'flex',
                 alignItems: 'center',

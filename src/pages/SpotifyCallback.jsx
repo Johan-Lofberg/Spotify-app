@@ -7,12 +7,17 @@ const SpotifyCallback = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let handled = false; // 👈 spärr mot dubbelkörning
+
     const runCallback = async () => {
+      if (handled) return;
+      handled = true;
+
       const code = new URLSearchParams(window.location.search).get('code');
       const codeVerifier = localStorage.getItem('code_verifier');
 
       if (!code || !codeVerifier) {
-        console.warn('Missing code or code_verifier');
+        console.warn('⚠️ Missing code or code_verifier');
         return;
       }
 
@@ -20,7 +25,7 @@ const SpotifyCallback = () => {
         // Hämta tokens från Spotify
         const data = await getToken(code);
 
-        // ✅ Spara tokens i localStorage så Dashboard hittar dem
+        // ✅ Spara tokens i localStorage
         if (data.access_token) {
           localStorage.setItem('access_token', data.access_token);
         }
@@ -31,7 +36,7 @@ const SpotifyCallback = () => {
         // ✅ Navigera till Dashboard
         navigate('/dashboard');
       } catch (error) {
-        console.error('Error handling Spotify callback:', error);
+        console.error('❌ Error handling Spotify callback:', error);
       }
     };
 

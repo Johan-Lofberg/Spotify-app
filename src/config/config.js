@@ -2,7 +2,7 @@ export const authEndpoint = 'https://accounts.spotify.com/authorize';
 export const clientId = import.meta.env.VITE_CLIENT_ID;
 export const liveURL = 'https://din-app.netlify.app/callback';
 export const devURL = 'http://127.0.0.1:5173/callback';
-export const redirectURL = import.meta.env.VITE_REDIRECT_URI;
+export const redirectUri = import.meta.env.VITE_REDIRECT_URI;
 export const scopes = [
 	'playlist-read-collaborative',
 	'playlist-modify-public',

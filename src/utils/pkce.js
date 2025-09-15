@@ -1,4 +1,4 @@
-import { clientId, redirectURL } from '../config/config.js';
+import { clientId, redirectUri } from '../config/config.js';
 
 // Skapar en slumpmässig verifierare
 export function generateCodeVerifier(length = 128) {
@@ -30,7 +30,7 @@ export async function getToken(code) {
     client_id: clientId,
     grant_type: 'authorization_code',
     code,
-    redirect_uri: redirectURL,   // ✅ använd rätt redirectURL
+    redirect_uri: redirectUri,   // ✅ använd rätt redirectURL
     code_verifier: codeVerifier,
   });
 
