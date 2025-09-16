@@ -9,17 +9,24 @@ const SideNav = ({ spotifyApi, token }) => {
 	const [playlists, setPlaylists] = useState([]);
 	const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		async function getPlaylists() {
-			if (!spotifyApi) return;
+useEffect(() => {
+  async function getPlaylists() {
+    if (!spotifyApi || !token) return; // 👈 blockera om token saknas
 
-			const data = await spotifyApi.getUserPlaylists();
+    try {
+      spotifyApi.setAccessToken(token); // 👈 se till att token används
 
-			setLoading(false);
-			setPlaylists(data.body.items);
-		}
-		getPlaylists();
-	}, [spotifyApi, token]);
+      const data = await spotifyApi.getUserPlaylists();
+      setLoading(false);
+      setPlaylists(data.body.items);
+    } catch (err) {
+      console.error("❌ Failed to load playlists:", err);
+    }
+  }
+
+  getPlaylists();
+}, [spotifyApi, token]);
+
 
   const renderPlaylist = () => {
 		if (loading) {
