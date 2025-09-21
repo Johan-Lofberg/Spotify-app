@@ -6,6 +6,8 @@ import SideNav from '../SideNav/SideNav';
 import { getAccessTokenFromStorage } from '../../utils/getAccessTokenFromStorage';
 import Playlist from '../../pages/Playlist';
 import Player from '../Player/Player';
+import MobileNav from '../MobileNav/MobileNav';
+import Library from '../../pages/Library';
 
 
 const Dashboard = ({ spotifyApi }) => {
@@ -34,11 +36,12 @@ const Dashboard = ({ spotifyApi }) => {
         <SideNav spotifyApi={spotifyApi} token={token} />
         <Routes>
           <Route path="/playlist/:id" element={<Playlist token={token} spotifyApi={spotifyApi} />} />
-          <Route path="/library" element={<div>Library</div>} />
+          <Route path="/library" element={<Library token={token} spotifyApi={spotifyApi}/>} />
           <Route path="/" element={<Home />} />
         </Routes>
       </Box>
       {token && <Player spotifyApi={spotifyApi} token={token} />}
+      <MobileNav />
     </Box>
   );
 };

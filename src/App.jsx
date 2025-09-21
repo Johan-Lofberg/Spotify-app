@@ -10,7 +10,7 @@ import Home from './pages/Home';
 
 // ✅ Dessa ska du använda (finns i components, inte pages)
 import Playlist from './components/Playlist/Playlist.jsx';
-import Library from './components/Library/Library.jsx';
+import Library from './pages/Library.jsx'; 
 
 import { getAccessToken } from './utils/getAccessToken.js';
 import { getAccessTokenFromStorage } from './utils/getAccessTokenFromStorage.js';

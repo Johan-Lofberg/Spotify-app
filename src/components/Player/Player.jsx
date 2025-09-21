@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, Typography, Avatar } from '@mui/material';
 import PlayerControls from '../PlayerControls/PlayerControls';
+import PlayerVolume from '../PlayerVolume/PlayerVolume';
+import PlayerOverlay from '../PlayerOverlay/PlayerOverlay';
 
 const Player = ({ spotifyApi, token }) => {
   const [localPlayer, setLocalPlayer] = useState();
@@ -10,6 +12,7 @@ const Player = ({ spotifyApi, token }) => {
   const [duration, setDuration] = useState(0);
   const [progress, setProgress] = useState(0);
   const [active, setActive] = useState();
+  const [playerOverlayIsOpen, setPlayerOverlayIsOpen] = useState(false);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -51,6 +54,7 @@ const Player = ({ spotifyApi, token }) => {
 
       player.connect();
     };
+    // End of useEffect callback
   }, [token]);
 
   useEffect(() => {
@@ -72,10 +76,10 @@ const Player = ({ spotifyApi, token }) => {
  //   };
  //   transferPlayback();
  // }, [device, spotifyApi]);
-
   return (
     <Box>
       <Grid
+      onClick={() => setPlayerOverlayIsOpen((prevState) => !prevState)}
         container
         px={3}
         sx={{
@@ -98,8 +102,8 @@ const Player = ({ spotifyApi, token }) => {
           }}
         >
           <Avatar
-            src={current_track?.album.images[0].url}
-            alt={current_track?.album.name}
+            src={current_track?.album?.images?.[0]?.url}
+            alt={current_track?.album?.name}
             variant="square"
             sx={{ width: 56, height: 56, marginRight: 2 }}
           />
@@ -108,7 +112,7 @@ const Player = ({ spotifyApi, token }) => {
               {current_track?.name}
             </Typography>
             <Typography sx={{ color: 'text.secondary', fontSize: 12 }}>
-              {current_track?.artists[0].name}
+              {current_track?.artists?.[0]?.name}
             </Typography>
           </Box>
         </Grid>
@@ -123,17 +127,30 @@ const Player = ({ spotifyApi, token }) => {
           }}
         >
           {active ? (
-			<PlayerControls
-            progress={progress}
-            is_paused={is_paused}
-            duration={duration}
-            player={localPlayer}
-          	/>
-			) : (
-			<Box>Please transfer Playback</Box>
-		  )}
+            <PlayerControls
+              progress={progress}
+              is_paused={is_paused}
+              duration={duration}
+              player={localPlayer}
+            />
+          ) : (
+            <Box>Please transfer Playback</Box>
+          )}
+        </Grid>
+        <Grid xs={6} md={4} item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+          <PlayerVolume player={localPlayer}/>
         </Grid>
       </Grid>
+      <PlayerOverlay 
+        playerOverlayIsOpen={playerOverlayIsOpen} 
+        closeOverlay={() => setPlayerOverlayIsOpen(false)}
+        progress={progress}
+        is_paused={is_paused}
+        duration={duration}
+        player={localPlayer}
+        current_track={current_track}
+        active={active}
+      />
     </Box>
   );
 };
